@@ -22,12 +22,12 @@ lazy val `auth-service` = project in file(".") enablePlugins Raml2Hyperbus setti
     ramlHyperbusSources := Seq(
       ramlSource(
         path = "api/auth-basic-service-api/auth-basic.raml",
-        packageName = "com.hypertino.api.authbasic",
+        packageName = "com.hypertino.authbasic.api",
         isResource = false
       ),
       ramlSource(
         path = "api/auth-basic-service-api/expects/user.raml",
-        packageName = "com.hypertino.api.authbasic.expects.user",
+        packageName = "com.hypertino.authbasic.api.user",
         isResource = false
       )
     )

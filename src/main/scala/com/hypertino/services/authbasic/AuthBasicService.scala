@@ -44,7 +44,8 @@ class AuthBasicService(console: Console, implicit val injector: Injector) extend
         // todo: configure lookup field
         val userNameFieldName = "email"
         hyperbus
-          .ask(UsersGet($query = Obj.from(userNameFieldName → userName)))
+          .ask(UsersGet(fields=Some(Seq("user_id", "password")), // todo: get from body companion?
+            $query = Obj.from(userNameFieldName → userName)))
           .map {
             case Ok(users, _) ⇒ {
               val r: ResponseBase =

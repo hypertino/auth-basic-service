@@ -7,14 +7,14 @@ import com.hypertino.authbasic.api.user.UsersGet
 import com.hypertino.binders.value.{Null, Obj}
 import com.hypertino.hyperbus.Hyperbus
 import com.hypertino.hyperbus.model.{BadRequest, Created, ErrorBody, Ok, ResponseBase, Unauthorized}
-import com.hypertino.service.control.api.{Console, Service}
+import com.hypertino.service.control.api.Service
 import monix.eval.Task
 import monix.execution.Scheduler
 import org.jasypt.util.password.StrongPasswordEncryptor
 import org.slf4j.LoggerFactory
 import scaldi.{Injectable, Injector}
 
-class AuthBasicService(console: Console, implicit val injector: Injector) extends Service with Injectable {
+class AuthBasicService(implicit val injector: Injector) extends Service with Injectable {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
   private val log = LoggerFactory.getLogger(getClass)

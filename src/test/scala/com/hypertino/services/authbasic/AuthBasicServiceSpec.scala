@@ -23,7 +23,6 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
   bind [Config] to ConfigLoader()
   bind [Scheduler] identifiedBy 'scheduler to scheduler
   bind [Hyperbus] identifiedBy 'hyperbus to injected[Hyperbus]
-  bind [Console] identifiedBy 'console toNonLazy injected[StdConsole]
 
   val hyperbus = inject[Hyperbus]
   val handlers = hyperbus.subscribe(this)
@@ -43,7 +42,7 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
     }
   }
 
-  val service = new AuthBasicService(inject[Console], injector)
+  val service = new AuthBasicService()
 
   override def afterAll() {
     service.stopService(false)
@@ -51,6 +50,8 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
   }
 
   "AuthBasicService" should "encrypt and validate password" in {
+    Thread.sleep(1000)
+
     val encryptedPassword = hyperbus
       .ask(EncryptionsPost(OriginalPassword("123456")))
       .runAsync

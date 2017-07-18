@@ -1,7 +1,7 @@
 package com.hypertino.services.authbasic
 
 import com.hypertino.authbasic.api._
-import com.hypertino.authbasic.api.user.{User, UserCollection, UsersGet}
+import com.hypertino.authbasic.apiref.user.{User, UserCollection, UsersGet}
 import com.hypertino.binders.value.{Null, Obj, Text}
 import com.hypertino.hyperbus.Hyperbus
 import com.hypertino.hyperbus.model.{Created, ErrorBody, MessagingContext, Ok, ResponseBase, Unauthorized}

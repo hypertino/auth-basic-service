@@ -3,7 +3,7 @@ package com.hypertino.services.authbasic
 import java.util.Base64
 
 import com.hypertino.authbasic.api.{EncryptedPassword, EncryptionsPost, ValidationResult, ValidationsPost}
-import com.hypertino.authbasic.api.user.UsersGet
+import com.hypertino.authbasic.apiref.user.UsersGet
 import com.hypertino.binders.value.{Null, Obj}
 import com.hypertino.hyperbus.Hyperbus
 import com.hypertino.hyperbus.model.{BadRequest, Created, ErrorBody, Ok, ResponseBase, Unauthorized}

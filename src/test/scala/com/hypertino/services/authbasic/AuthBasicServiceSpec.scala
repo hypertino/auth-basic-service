@@ -45,7 +45,7 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
   val service = new AuthBasicService()
 
   override def afterAll() {
-    service.stopService(false)
+    service.stopService(false, 10.seconds).futureValue
     hyperbus.shutdown(10.seconds).runAsync.futureValue
   }
 

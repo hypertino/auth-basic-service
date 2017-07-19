@@ -14,6 +14,9 @@ import org.jasypt.util.password.StrongPasswordEncryptor
 import org.slf4j.LoggerFactory
 import scaldi.{Injectable, Injector}
 
+import scala.concurrent.Future
+import scala.concurrent.duration.FiniteDuration
+
 class AuthBasicService(implicit val injector: Injector) extends Service with Injectable {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
@@ -85,7 +88,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
     ))
   }
 
-  def stopService(controlBreak: Boolean): Unit = {
+  override def stopService(controlBreak: Boolean, timeout: FiniteDuration): Future[Unit] = Future {
     handlers.foreach(_.cancel())
     log.info("AuthService stopped")
   }

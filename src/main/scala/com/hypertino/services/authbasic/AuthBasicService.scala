@@ -21,7 +21,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
   private val log = LoggerFactory.getLogger(getClass)
-  log.info("AuthService started")
+  log.info("AuthBasicService started")
 
   // todo: support scheme configuration + backward compatibility?
   private val passwordEncryptor = new StrongPasswordEncryptor
@@ -90,6 +90,6 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
 
   override def stopService(controlBreak: Boolean, timeout: FiniteDuration): Future[Unit] = Future {
     handlers.foreach(_.cancel())
-    log.info("AuthService stopped")
+    log.info("AuthBasicService stopped")
   }
 }

@@ -16,8 +16,9 @@ import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 import scaldi.Module
 
 import scala.concurrent.duration._
+import com.hypertino.hyperbus.subscribe.Subscribable
 
-class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll with ScalaFutures with Matchers {
+class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll with ScalaFutures with Matchers with Subscribable {
   implicit val scheduler = monix.execution.Scheduler.Implicits.global
   implicit val mcx = MessagingContext.empty
   bind [Config] to ConfigLoader()

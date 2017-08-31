@@ -7,6 +7,7 @@ import com.hypertino.authbasic.apiref.user.UsersGet
 import com.hypertino.binders.value.{Null, Obj}
 import com.hypertino.hyperbus.Hyperbus
 import com.hypertino.hyperbus.model.{BadRequest, Created, ErrorBody, Ok, ResponseBase, Unauthorized}
+import com.hypertino.hyperbus.subscribe.Subscribable
 import com.hypertino.service.control.api.Service
 import monix.eval.Task
 import monix.execution.Scheduler
@@ -17,7 +18,7 @@ import scaldi.{Injectable, Injector}
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 
-class AuthBasicService(implicit val injector: Injector) extends Service with Injectable {
+class AuthBasicService(implicit val injector: Injector) extends Service with Injectable with Subscribable {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
   private val log = LoggerFactory.getLogger(getClass)

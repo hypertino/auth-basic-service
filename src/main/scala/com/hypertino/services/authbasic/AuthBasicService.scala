@@ -12,21 +12,20 @@ import com.hypertino.service.control.api.Service
 import monix.eval.Task
 import monix.execution.Scheduler
 import org.jasypt.util.password.StrongPasswordEncryptor
-import org.slf4j.LoggerFactory
+import com.typesafe.scalalogging.StrictLogging
 import scaldi.{Injectable, Injector}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 
-class AuthBasicService(implicit val injector: Injector) extends Service with Injectable with Subscribable {
+class AuthBasicService(implicit val injector: Injector) extends Service with Injectable with Subscribable with StrictLogging {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
-  private val log = LoggerFactory.getLogger(getClass)
-  log.info("AuthBasicService started")
+  logger.info(s"${getClass.getName} started")
 
   // todo: support scheme configuration + backward compatibility?
   private val passwordEncryptor = new StrongPasswordEncryptor
-  private val handlers = hyperbus.subscribe(this, log)
+  private val handlers = hyperbus.subscribe(this, logger)
 
   def onValidationsPost(implicit post: ValidationsPost): Task[ResponseBase] = {
     val authorization = post.body.authorization
@@ -91,6 +90,6 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
 
   override def stopService(controlBreak: Boolean, timeout: FiniteDuration): Future[Unit] = Future {
     handlers.foreach(_.cancel())
-    log.info("AuthBasicService stopped")
+    logger.info(s"${getClass.getName} stopped")
   }
 }

@@ -48,7 +48,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
         val userNameFieldName = "email"
         hyperbus
           .ask(UsersGet(fields=Some(Seq("user_id", "password")), // todo: get from body companion?
-            $query = Obj.from(userNameFieldName → userName)))
+            query = Obj.from(userNameFieldName → userName)))
           .map {
             case Ok(users, _) ⇒ {
               val r: ResponseBase =

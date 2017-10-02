@@ -9,9 +9,9 @@ import com.hypertino.hyperbus.Hyperbus
 import com.hypertino.hyperbus.model.{BadRequest, Created, ErrorBody, Ok, ResponseBase, Unauthorized}
 import com.hypertino.hyperbus.subscribe.Subscribable
 import com.hypertino.service.control.api.Service
+import com.hypertino.services.authbasic.password.{BcryptPasswordHasher, PasswordHasher}
 import monix.eval.Task
 import monix.execution.Scheduler
-import org.jasypt.util.password.StrongPasswordEncryptor
 import com.typesafe.scalalogging.StrictLogging
 import scaldi.{Injectable, Injector}
 
@@ -23,8 +23,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
   private val hyperbus = inject[Hyperbus]
   logger.info(s"${getClass.getName} started")
 
-  // todo: support scheme configuration + backward compatibility?
-  private val passwordEncryptor = new StrongPasswordEncryptor
+  protected val passwordHasher: PasswordHasher = new BcryptPasswordHasher()
   private val handlers = hyperbus.subscribe(this, logger)
 
   def onValidationsPost(implicit post: ValidationsPost): Task[ResponseBase] = {
@@ -61,7 +60,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
                     Unauthorized(ErrorBody("password-is-not-defined", Some(s"Password of user '$userName' is not defined")))
                   }
                   else {
-                    if (passwordEncryptor.checkPassword(password, user.password.get)) {
+                    if (passwordHasher.checkPassword(password, user.password.get)) {
                       Created(ValidationResult(
                         identityKeys = Obj.from(
                           userNameFieldName → userName,
@@ -84,7 +83,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
 
   def onEncryptionsPost(implicit post: EncryptionsPost): Task[ResponseBase] = Task.eval {
     Created(EncryptedPassword(
-      passwordEncryptor.encryptPassword(post.body.value)
+      passwordHasher.encryptPassword(post.body.value)
     ))
   }
 

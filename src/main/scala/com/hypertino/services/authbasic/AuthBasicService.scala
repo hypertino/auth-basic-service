@@ -21,7 +21,7 @@ import scala.concurrent.duration.FiniteDuration
 class AuthBasicService(implicit val injector: Injector) extends Service with Injectable with Subscribable with StrictLogging {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
-  logger.info(s"${getClass.getName} started")
+  logger.info(s"${getClass.getName} is STARTED")
 
   protected val passwordHasher: PasswordHasher = new BcryptPasswordHasher()
   private val handlers = hyperbus.subscribe(this, logger)
@@ -89,6 +89,6 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
 
   override def stopService(controlBreak: Boolean, timeout: FiniteDuration): Future[Unit] = Future {
     handlers.foreach(_.cancel())
-    logger.info(s"${getClass.getName} stopped")
+    logger.info(s"${getClass.getName} is STOPPED")
   }
 }

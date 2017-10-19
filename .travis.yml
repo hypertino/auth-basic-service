@@ -1,22 +1,29 @@
 language: scala
+
 scala:
-- 2.11.8
+  - 2.12.3
+  - 2.11.11
+
 sudo: false
-script: $TRAVIS_BUILD_DIR/travis/build.sh
+script: $TRAVIS_BUILD_DIR/travis/script/build.sh
+
 jdk:
-- oraclejdk8
+  - oraclejdk8
+
 cache:
   directories:
   - $HOME/.m2
   - $HOME/.ivy2
   - $HOME/.sbt
+
 git:
   submodules: false
 before_install:
-- sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-- git submodule update --init
-- sed -i 's/git@github.com:/https:\/\/github.com\//' api/auth-basic-service-api/.gitmodules
-- git submodule update --init --recursive
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' api/auth-basic-service-api/.gitmodules
+  - git submodule update --init --recursive
+
 env:
   global:
   - secure: l0LVQNTw87gecqsumPrTP4e1L7mU2nyXqkdPa2X+KAMfbWnCAN04+UpcDOWkLrFk7PMt3abwQX7X5UcSYFpsJFCJrwnUWJb1ZBtTuF5njpgzrxwtXX0pRl3WqyeyFpcADVdEMv1M6yUwDtkYvUAAx314jXZ0eYhNaUZvcMw29fuy4WJ765ChU3CTQYaKi/932PYZQaaitBY5tfPtbOLv9VziH8dkjBVxW4ShsvhMNbP8Sf1qrLwDccm3klcCKOOLH/3lB7BdTVcsliXzytQ4thN5hcE+u1DlrnssS/bfzPs6Vg7EeXbQxNMa9d1xNlLeENGbQKk1PrlqcHup2WrQsamTlTAJTXKYlzWl/5fb4QyAAJd45sZGbjbgPL+qrFl3e70V0cR8xskssS/D445TQd4jQ6YBqwNjsqhM1hVvL24FNIoRrFD6OkM3C+IbCeBWi5XSt0AKjdZDbXIPbVinh4/pHO0lN0uyZfRGIxbcmla2Mw1hGO5xCdTZOkhB6p1NnjsHFqN6wwQhOoQZ7Q2KGxxG86ob65EH1c32V3EOhfnXk9jd2fOndNom6g67KO+xs7BTRyEtLTM3hGb1mLiVCrOkxJA3NfgK2YWztRZY8vMM0n12cjvh/rBdVYWI+TjkFDYCLRsn/YIJa/Fg0F5G0MFkYW7PW6Y70/MwHjCZ2j8=

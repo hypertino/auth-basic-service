@@ -17,20 +17,23 @@ import scaldi.Module
 
 import scala.concurrent.duration._
 import com.hypertino.hyperbus.subscribe.Subscribable
+import com.hypertino.hyperbus.transport.api.ServiceRegistrator
+import com.hypertino.hyperbus.transport.registrators.DummyRegistrator
 
 class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll with ScalaFutures with Matchers with Subscribable {
   implicit val scheduler = monix.execution.Scheduler.Implicits.global
   implicit val mcx = MessagingContext.empty
   bind [Config] to ConfigLoader()
-  bind [Scheduler] identifiedBy 'scheduler to scheduler
-  bind [Hyperbus] identifiedBy 'hyperbus to injected[Hyperbus]
+  bind [Scheduler] to scheduler
+  bind [ServiceRegistrator] to DummyRegistrator
+  bind [Hyperbus] to injected[Hyperbus]
 
   val hyperbus = inject[Hyperbus]
   val handlers = hyperbus.subscribe(this)
   var password1: Option[String] = None
 
   def onUsersGet(implicit get: UsersGet) = Task.eval[ResponseBase] {
-    val userId = get.headers.hrl.query.email
+    val userId = get.headers.hrl.query.dynamic.email
     val p = password1
     password1 = None
     if (userId == Text("info@example.com")) {

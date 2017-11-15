@@ -10,6 +10,7 @@ import com.hypertino.hyperbus.model.{BadRequest, Created, ErrorBody, Ok, Respons
 import com.hypertino.hyperbus.subscribe.Subscribable
 import com.hypertino.service.control.api.Service
 import com.hypertino.services.authbasic.password.{BcryptPasswordHasher, PasswordHasher}
+import com.hypertino.services.authbasic.util.ErrorCode
 import monix.eval.Task
 import monix.execution.Scheduler
 import com.typesafe.scalalogging.StrictLogging
@@ -30,14 +31,14 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
     val authorization = post.body.authorization
     val spaceIndex = authorization.indexOf(" ")
     if (spaceIndex < 0 || authorization.substring(0, spaceIndex).compareToIgnoreCase("basic") != 0) {
-      Task.eval(BadRequest(ErrorBody("format-error")))
+      Task.eval(BadRequest(ErrorBody(ErrorCode.FORMAT_ERROR)))
     }
     else {
       val base64 = authorization.substring(spaceIndex + 1)
       val userNameAndPassword = new String(Base64.getDecoder.decode(base64), "UTF-8")
       val semicolonIndex = userNameAndPassword.indexOf(":")
       if (semicolonIndex < 0) {
-        Task.eval(BadRequest(ErrorBody("format-error-username")))
+        Task.eval(BadRequest(ErrorBody(ErrorCode.FORMAT_ERROR_USERNAME)))
       }
       else {
         val userName = userNameAndPassword.substring(0, semicolonIndex)
@@ -52,12 +53,12 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
             case Ok(users, _) ⇒ {
               val r: ResponseBase =
                 if (users.items.isEmpty || users.items.tail.nonEmpty) {
-                  Unauthorized(ErrorBody("user-not-found", Some(s"User '$userName' is not found")))
+                  Unauthorized(ErrorBody(ErrorCode.USER_NOT_FOUND, Some(s"User '$userName' is not found")))
                 }
                 else {
                   val user = users.items.head
                   if (user.password.isEmpty) {
-                    Unauthorized(ErrorBody("password-is-not-defined", Some(s"Password of user '$userName' is not defined")))
+                    Unauthorized(ErrorBody(ErrorCode.PASSWORD_IS_NOT_DEFINED, Some(s"Password of user '$userName' is not defined")))
                   }
                   else {
                     if (passwordHasher.checkPassword(password, user.password.get)) {
@@ -70,7 +71,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
                       ))
                     }
                     else {
-                      Unauthorized(ErrorBody("password-is-not-valid", Some(s"Password of user '$userName' is not valid")))
+                      Unauthorized(ErrorBody(ErrorCode.PASSWORD_IS_NOT_VALID, Some(s"Password of user '$userName' is not valid")))
                     }
                   }
                 }

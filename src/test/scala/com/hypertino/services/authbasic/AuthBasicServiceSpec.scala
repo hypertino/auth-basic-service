@@ -83,7 +83,7 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
 
     r shouldBe a[Unauthorized[_]]
     val b = r.asInstanceOf[Unauthorized[ErrorBody]].body
-    b.code shouldBe "user-not-found"
+    b.code shouldBe "user_not_found"
   }
 
   "AuthBasicService" should "unathorize if password is incorrect" in {

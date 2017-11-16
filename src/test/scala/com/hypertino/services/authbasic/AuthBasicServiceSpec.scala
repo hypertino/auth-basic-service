@@ -104,6 +104,6 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
 
     r shouldBe a[Unauthorized[_]]
     val b = r.asInstanceOf[Unauthorized[ErrorBody]].body
-    b.code shouldBe "password-is-not-valid"
+    b.code shouldBe "password_is_not_valid"
   }
 }

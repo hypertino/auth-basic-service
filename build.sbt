@@ -4,16 +4,16 @@ scalaVersion := crossScalaVersions.value.head
 
 lazy val `auth-service` = project in file(".") enablePlugins Raml2Hyperbus settings (
     name := "auth-basic-service",
-    version := "0.3-SNAPSHOT",
+    version := "0.4-SNAPSHOT",
     organization := "com.hypertino",  
     resolvers ++= Seq(
       Resolver.sonatypeRepo("public")
     ),
     libraryDependencies ++= Seq(
-      "com.hypertino" %% "hyperbus" % "0.4-SNAPSHOT",
-      "com.hypertino" %% "service-control" % "0.3.0",
+      "com.hypertino" %% "hyperbus" % "0.6-SNAPSHOT",
+      "com.hypertino" %% "service-control" % "0.4.0",
       "org.mindrot" % "jbcrypt" % "0.4",
-      "com.hypertino" %% "hyperbus-t-inproc" % "0.4-SNAPSHOT" % "test",
+      "com.hypertino" %% "hyperbus-t-inproc" % "0.6-SNAPSHOT" % "test",
       "com.hypertino" %% "service-config" % "0.2.0" % "test",
       "ch.qos.logback" % "logback-classic" % "1.2.3" % "test",
       "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "test",
@@ -32,3 +32,6 @@ lazy val `auth-service` = project in file(".") enablePlugins Raml2Hyperbus setti
       )
     )
 )
+
+logBuffered in Test := false
+parallelExecution in Test := false

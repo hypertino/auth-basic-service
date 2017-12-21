@@ -13,6 +13,7 @@ import monix.eval.Task
 import monix.execution.Scheduler
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
+import org.scalatest.time.{Millis, Span}
 import scaldi.Module
 
 import scala.concurrent.duration._
@@ -21,6 +22,7 @@ import com.hypertino.hyperbus.transport.api.ServiceRegistrator
 import com.hypertino.hyperbus.transport.registrators.DummyRegistrator
 
 class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll with ScalaFutures with Matchers with Subscribable {
+  override implicit val patienceConfig = PatienceConfig(timeout = scaled(Span(5000, Millis)))
   implicit val scheduler = monix.execution.Scheduler.Implicits.global
   implicit val mcx = MessagingContext.empty
   bind [Config] to ConfigLoader()
@@ -31,6 +33,9 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
   val hyperbus = inject[Hyperbus]
   val handlers = hyperbus.subscribe(this)
   var password1: Option[String] = None
+  val service = new AuthBasicService()
+  hyperbus.startServices()
+  service.startService()
 
   def onUsersGet(implicit get: UsersGet) = Task.eval[ResponseBase] {
     val userId = get.headers.hrl.query.dynamic.email
@@ -46,15 +51,13 @@ class AuthBasicServiceSpec extends FlatSpec with Module with BeforeAndAfterAll w
     }
   }
 
-  val service = new AuthBasicService()
-
   override def afterAll() {
     service.stopService(false, 10.seconds).futureValue
     hyperbus.shutdown(10.seconds).runAsync.futureValue
   }
 
   "AuthBasicService" should "encrypt and validate password" in {
-    Thread.sleep(1000)
+    //Thread.sleep(1000)
 
     val encryptedPassword = hyperbus
       .ask(EncryptionsPost(OriginalPassword("123456")))

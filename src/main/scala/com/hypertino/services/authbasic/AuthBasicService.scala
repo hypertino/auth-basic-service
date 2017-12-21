@@ -22,10 +22,15 @@ import scala.concurrent.duration.FiniteDuration
 class AuthBasicService(implicit val injector: Injector) extends Service with Injectable with Subscribable with StrictLogging {
   private implicit val scheduler = inject[Scheduler]
   private val hyperbus = inject[Hyperbus]
-  logger.info(s"${getClass.getName} is STARTED")
 
   protected val passwordHasher: PasswordHasher = new BcryptPasswordHasher()
   private val handlers = hyperbus.subscribe(this, logger)
+
+  logger.info(s"${getClass.getName} is INITIALIZED")
+
+  override def startService(): Unit = {
+    logger.info(s"${getClass.getName} is STARTED")
+  }
 
   def onValidationsPost(implicit post: ValidationsPost): Task[ResponseBase] = {
     val authorization = post.body.authorization

@@ -1,4 +1,4 @@
-crossScalaVersions := Seq("2.12.3", "2.11.11")
+crossScalaVersions := Seq("2.12.4", "2.11.12")
 
 scalaVersion := crossScalaVersions.value.head
 
@@ -11,7 +11,7 @@ lazy val `auth-service` = project in file(".") enablePlugins Raml2Hyperbus setti
     ),
     libraryDependencies ++= Seq(
       "com.hypertino" %% "hyperbus" % "0.6-SNAPSHOT",
-      "com.hypertino" %% "service-control" % "0.4.0",
+      "com.hypertino" %% "service-control" % "0.4.1",
       "org.mindrot" % "jbcrypt" % "0.4",
       "com.hypertino" %% "hyperbus-t-inproc" % "0.6-SNAPSHOT" % "test",
       "com.hypertino" %% "service-config" % "0.2.0" % "test",

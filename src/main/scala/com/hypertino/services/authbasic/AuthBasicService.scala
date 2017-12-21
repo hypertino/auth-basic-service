@@ -26,11 +26,7 @@ class AuthBasicService(implicit val injector: Injector) extends Service with Inj
   protected val passwordHasher: PasswordHasher = new BcryptPasswordHasher()
   private val handlers = hyperbus.subscribe(this, logger)
 
-  logger.info(s"${getClass.getName} is INITIALIZED")
-
-  override def startService(): Unit = {
-    logger.info(s"${getClass.getName} is STARTED")
-  }
+  logger.info(s"${getClass.getName} is STARTED")
 
   def onValidationsPost(implicit post: ValidationsPost): Task[ResponseBase] = {
     val authorization = post.body.authorization

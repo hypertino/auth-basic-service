@@ -12,7 +12,7 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false}
 
 pomExtra :=
-  <url>https://github.com/hypertino/hyperbus-utils</url>
+  <url>https://github.com/hypertino/auth-basic-service</url>
     <licenses>
       <license>
         <name>BSD-style</name>
@@ -21,8 +21,8 @@ pomExtra :=
       </license>
     </licenses>
     <scm>
-      <url>git@github.com:hypertino/hyperbus-utils.git</url>
-      <connection>scm:git:git@github.com:hypertino/hyperbus-utils.git</connection>
+      <url>git@github.com:hypertino/auth-basic-service.git</url>
+      <connection>scm:git:git@github.com:hypertino/auth-basic-service.git</connection>
     </scm>
     <developers>
       <developer>
